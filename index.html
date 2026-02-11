@@ -55,12 +55,17 @@
     <div class="loader-spinner"></div>
   </div>
   
-  <iframe id="portal" src="" allow="clipboard-write"></iframe>
+  <iframe 
+    id="portal" 
+    src="" 
+    allow="clipboard-write"
+    sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-popups-to-escape-sandbox allow-top-navigation"
+  ></iframe>
 
   <script>
     var APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwYpyIhDppONLPCCjlsmHwSOJy4vOWc0EhWaQqPS6tqyf_ytjVmqYOvJSmwMsQtOJel/exec';
     
-    // Pass through any query parameters (e.g. ?portal=TOKEN)
+    // Pass through any query parameters (e.g. ?portal=TOKEN or ?admin=TOKEN)
     var params = window.location.search;
     document.getElementById('portal').src = APPS_SCRIPT_URL + params;
     
@@ -75,6 +80,15 @@
     setTimeout(function() {
       document.getElementById('loader').classList.add('hidden');
     }, 8000);
+    
+    // Listen for admin login redirect from login page inside iframe
+    window.addEventListener('message', function(event) {
+      if (event.data && event.data.type === 'adminLogin' && event.data.token) {
+        // Redirect this page with the admin token
+        var baseUrl = window.location.href.split('?')[0];
+        window.location.href = baseUrl + '?admin=' + event.data.token;
+      }
+    });
   </script>
 </body>
 </html>
