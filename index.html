@@ -3,9 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Absolute Living — Property Portal</title>
-  
-  <!-- Favicon: purple circle with AL -->
+  <title>Absolute Living — Property Management</title>
   <script>
   (function(){
     var c = document.createElement('canvas');
@@ -19,13 +17,10 @@
     document.head.appendChild(l);
   })();
   </script>
-  
   <style>
     * { margin: 0; padding: 0; }
     html, body { height: 100%; overflow: hidden; background: #F5EEF3; }
     iframe { width: 100%; height: 100%; border: none; }
-    
-    /* Loading screen while iframe loads */
     #loader {
       position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: 10;
       background: #F5EEF3;
@@ -48,45 +43,36 @@
   </style>
 </head>
 <body>
-  <!-- Loading screen -->
   <div id="loader">
     <div class="loader-logo">AL</div>
-    <div class="loader-text">Absolute Living — Property Portal</div>
+    <div class="loader-text">Absolute Living — Property Management</div>
     <div class="loader-spinner"></div>
   </div>
   
-  <iframe 
-    id="portal" 
-    src="" 
-    allow="clipboard-write"
-  ></iframe>
+  <iframe id="portal" src="" allow="clipboard-write"></iframe>
 
   <script>
     var APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwYpyIhDppONLPCCjlsmHwSOJy4vOWc0EhWaQqPS6tqyf_ytjVmqYOvJSmwMsQtOJel/exec';
     
-    // Pass through any query parameters (e.g. ?portal=TOKEN or ?admin=TOKEN)
+    // Pass through any query parameters (?admin=TOKEN)
     var params = window.location.search;
     document.getElementById('portal').src = APPS_SCRIPT_URL + params;
     
-    // Hide loader when iframe is ready
     document.getElementById('portal').addEventListener('load', function() {
-      setTimeout(function() {
-        document.getElementById('loader').classList.add('hidden');
-      }, 300);
+      setTimeout(function() { document.getElementById('loader').classList.add('hidden'); }, 300);
     });
     
-    // Fallback: hide loader after 8 seconds regardless
-    setTimeout(function() {
-      document.getElementById('loader').classList.add('hidden');
-    }, 8000);
+    setTimeout(function() { document.getElementById('loader').classList.add('hidden'); }, 8000);
     
     // Listen for admin login redirect from login page inside iframe
     window.addEventListener('message', function(event) {
-      if (event.data && event.data.type === 'adminLogin' && event.data.token) {
-        // Redirect this page with the admin token
-        var baseUrl = window.location.href.split('?')[0];
-        window.location.href = baseUrl + '?admin=' + event.data.token;
-      }
+      try {
+        var data = event.data;
+        if (typeof data === 'string') data = JSON.parse(data);
+        if (data.type === 'adminLogin' && data.token) {
+          window.location.href = window.location.href.split('?')[0] + '?admin=' + data.token;
+        }
+      } catch(e) {}
     });
   </script>
 </body>
