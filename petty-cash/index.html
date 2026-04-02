@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Petty Cash — Absolute Living</title>
+  <script>
+  (function(){
+    var c = document.createElement('canvas');
+    c.width = 32; c.height = 32;
+    var x = c.getContext('2d');
+    x.beginPath(); x.arc(16,16,16,0,2*Math.PI); x.fillStyle='#6B2D5B'; x.fill();
+    x.fillStyle='#fff'; x.font='bold 15px Arial'; x.textAlign='center'; x.textBaseline='middle';
+    x.fillText('AL',16,17);
+    var l = document.createElement('link');
+    l.rel='icon'; l.type='image/png'; l.href=c.toDataURL();
+    document.head.appendChild(l);
+  })();
+  </script>
+  <style>
+    * { margin: 0; padding: 0; }
+    html, body { height: 100%; overflow: hidden; background: #F5EEF3; }
+    iframe { width: 100%; height: 100%; border: none; }
+    #loader {
+      position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: 10;
+      background: #F5EEF3;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      transition: opacity 0.4s ease;
+    }
+    #loader.hidden { opacity: 0; pointer-events: none; }
+    .loader-logo {
+      width: 56px; height: 56px; border-radius: 14px; background: #6B2D5B;
+      display: flex; align-items: center; justify-content: center;
+      font-family: Arial, sans-serif; font-size: 22px; font-weight: 700; color: #fff;
+      margin-bottom: 16px;
+    }
+    .loader-text { font-family: Arial, sans-serif; font-size: 14px; color: #6B2D5B; }
+    .loader-spinner {
+      width: 24px; height: 24px; border: 3px solid #E8D5E3; border-top-color: #6B2D5B;
+      border-radius: 50%; animation: spin 0.8s linear infinite; margin-top: 16px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+  </style>
+</head>
+<body>
+  <div id="loader">
+    <div class="loader-logo">AL</div>
+    <div class="loader-text">Absolute Living — Petty Cash</div>
+    <div class="loader-spinner"></div>
+  </div>
+  
+  <iframe id="portal" src="" allow="clipboard-write"></iframe>
+  <script>
+    // ═══════════════════════════════════════════════════════════
+    // REPLACE THIS URL after deploying the Petty Cash Apps Script
+    // ═══════════════════════════════════════════════════════════
+    var APPS_SCRIPT_URL = 'YOUR_PETTY_CASH_APPS_SCRIPT_URL_HERE';
+    
+    document.getElementById('portal').src = APPS_SCRIPT_URL;
+    
+    document.getElementById('portal').addEventListener('load', function() {
+      setTimeout(function() { document.getElementById('loader').classList.add('hidden'); }, 300);
+    });
+    
+    setTimeout(function() { document.getElementById('loader').classList.add('hidden'); }, 8000);
+  </script>
+</body>
+</html>
