@@ -3,32 +3,56 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
-  <!-- Lets it launch full-screen when added to a phone home screen -->
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="theme-color" content="#1f4e5f">
-  <title>Kinfold — Contractors</title>
+  <meta name="theme-color" content="#5b2a4d">
+  <link rel="icon" href="https://www.absoluteliving.co.uk/wp-content/uploads/2023/03/absolute-living-logo__square.png">
+  <link rel="apple-touch-icon" href="https://www.absoluteliving.co.uk/wp-content/uploads/2023/03/absolute-living-logo__square.png">
+  <title>Absolute Living · Contractors</title>
   <style>
-    html, body { margin: 0; height: 100%; background: #1f4e5f; }
+    html, body { margin: 0; height: 100%; background: #5b2a4d; }
     #app { position: fixed; inset: 0; width: 100%; height: 100%; border: 0; }
     #load {
-      position: fixed; inset: 0; display: flex; align-items: center; justify-content: center;
-      background: #1f4e5f; color: #fff; z-index: 2;
-      font: 500 16px -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+      position: fixed; inset: 0; z-index: 2;
+      display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px;
+      background: #5b2a4d; color: #fff; text-align: center;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, Roboto, Arial, sans-serif;
     }
-    #load span { opacity: .85; }
+    #load .mark {
+      width: 54px; height: 54px; border-radius: 14px;
+      background: rgba(255,255,255,.14);
+      display: flex; align-items: center; justify-content: center;
+    }
+    #load .mark svg { width: 30px; height: 30px; }
+    #load .brand { font-weight: 700; font-size: 18px; letter-spacing: 1.6px; text-transform: uppercase; }
+    #load .sub { font-size: 12px; letter-spacing: .4px; color: rgba(255,255,255,.72); margin-top: -8px; }
+    #load .dot {
+      margin-top: 6px; width: 24px; height: 24px; border-radius: 50%;
+      border: 2px solid rgba(255,255,255,.25); border-top-color: #fff;
+      animation: spin .8s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
   </style>
 </head>
 <body>
-  <div id="load"><span>Loading…</span></div>
+  <div id="load">
+    <div class="mark">
+      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M3 21h18M5 21V4a1 1 0 0 1 1-1h8a1 1 0 0 1 1 1v17M15 21V9h3a1 1 0 0 1 1 1v11M8 7h2M8 11h2M8 15h2"
+              stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <div class="brand">Absolute Living</div>
+    <div class="sub">Contractors</div>
+    <div class="dot"></div>
+  </div>
 
-  <!-- ▼▼▼  PASTE YOUR APPS SCRIPT WEB APP URL BETWEEN THE QUOTES  ▼▼▼ -->
+  <!-- Apps Script Web App URL (yours, already set) -->
   <iframe
     id="app"
     src="https://script.google.com/macros/s/AKfycbxJUpBkMG3UbDHcDf6m-laq6J8RqWlGERW5UW7YordyC8p3SHvwfSMj0YKrKb6-KraE/exec"
     allow="clipboard-write; clipboard-read"
     onload="var l=document.getElementById('load'); if(l) l.remove();"></iframe>
-  <!-- ▲▲▲  e.g. https://script.google.com/macros/s/AKfy..../exec  ▲▲▲ -->
 </body>
 </html>
