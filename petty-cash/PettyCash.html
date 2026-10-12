@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<style>
+:root{--plum:#6B2D5B;--plum-dark:#5A2550;--plum-deep:#4A1D42;--plum-light:#B87DA8;--plum-pale:#E8D5E3;--plum-ghost:#F5EEF3;--white:#FFF;--grey-50:#F3F0F2;--grey-100:#E5E0E3;--grey-200:#CCC5C9;--grey-400:#998E94;--grey-600:#6B5F65;--text:#3A2832;--danger:#C0392B;--success:#27AE60;--success-bg:#EAF7F0;--danger-bg:#FEF0EF;--amber:#E67E22;--amber-bg:#FEF5E7}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:Arial,'Helvetica Neue',Helvetica,sans-serif;background:var(--plum-ghost);color:var(--text);min-height:100vh;-webkit-font-smoothing:antialiased}
+.header{background:var(--plum);color:#fff;padding:14px 20px;display:flex;justify-content:space-between;align-items:center}
+.logo-mark{width:36px;height:36px;border-radius:10px;background:rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;color:#fff;letter-spacing:1px}
+.logo-row{display:flex;align-items:center;gap:10px}.logo-title{font-weight:700;font-size:16px}.logo-sub{font-size:10px;color:var(--plum-light);letter-spacing:1.5px;text-transform:uppercase}
+.stat-num{font-size:22px;font-weight:700;line-height:1}.stat-label{font-size:9px;color:var(--plum-light);text-transform:uppercase;letter-spacing:.5px}
+.qtr-bar{background:#fff;padding:10px 20px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--grey-100);font-size:12px}
+.qtr-label{font-weight:600;color:var(--plum-dark)}.qtr-countdown{color:var(--grey-600)}.qtr-countdown.urgent{color:var(--amber);font-weight:600}.qtr-countdown.overdue{color:var(--danger);font-weight:600}
+.nav{display:flex;background:var(--plum-deep)}
+.nav-btn{flex:1;padding:10px 4px;border:none;background:0 0;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px;color:var(--plum-light);font-size:9px;font-weight:500;border-bottom:2px solid transparent;transition:all .15s;font-family:inherit}
+.nav-btn.active{background:rgba(255,255,255,.08);color:#fff;border-bottom-color:#fff}.nav-btn:hover{color:#fff}
+.nav-icon{font-size:15px;line-height:1}
+.main{padding:14px;max-width:600px;margin:0 auto}.tab{display:none}.tab.active{display:block}
+.card{background:#fff;border-radius:10px;padding:18px;box-shadow:0 1px 3px rgba(107,45,91,.08),0 0 0 1px rgba(107,45,91,.04);margin-bottom:12px}
+.card-title{font-size:15px;font-weight:700;color:var(--plum-dark);margin-bottom:14px}
+.sub-title{font-size:13px;font-weight:600;color:var(--plum-dark);margin-bottom:10px}
+.label{display:block;font-size:10px;font-weight:700;color:var(--grey-400);margin-bottom:3px;text-transform:uppercase;letter-spacing:.5px}
+input[type="text"],input[type="number"],input[type="date"],input[type="email"],select{width:100%;padding:10px 12px;border-radius:8px;border:1.5px solid var(--grey-100);font-size:16px;outline:none;background:#fff;color:var(--text);font-family:inherit;-webkit-appearance:none}
+input:focus,select:focus{border-color:var(--plum-light)}
+.row{display:flex;gap:10px}.field{flex:1;margin-bottom:12px}
+.chip-row{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px}
+.chip{padding:8px 16px;border-radius:8px;border:1.5px solid var(--grey-100);background:#fff;font-size:14px;cursor:pointer;font-weight:500;color:var(--grey-600);font-family:inherit;-webkit-tap-highlight-color:transparent}
+.chip:hover{border-color:var(--plum-light)}.chip.active{background:var(--plum);color:#fff;border-color:var(--plum)}
+.btn{width:100%;padding:14px 18px;border-radius:10px;border:none;background:var(--plum);color:#fff;font-size:16px;font-weight:600;cursor:pointer;margin-top:8px;font-family:inherit;-webkit-tap-highlight-color:transparent}
+.btn:disabled{opacity:.4;cursor:not-allowed}.btn.green{background:var(--success)}.btn.amber{background:var(--amber)}
+.btn.sm{width:auto;padding:8px 16px;font-size:13px;margin-top:0;border-radius:8px}
+.btn.outline{background:0 0;color:var(--plum);border:1.5px solid var(--plum-pale)}.btn.outline:hover{background:var(--plum-ghost)}
+.btn.danger-outline{background:0 0;color:var(--danger);border:1.5px solid #f0c5c0}
+.btn-del{width:28px;height:28px;border-radius:6px;border:none;background:var(--danger-bg);color:var(--danger);font-size:16px;cursor:pointer;line-height:1;font-weight:700}
+.ok{background:var(--success-bg);color:var(--success);padding:8px 12px;border-radius:8px;font-size:13px;font-weight:600;margin-bottom:12px;text-align:center}
+.err{background:var(--danger-bg);color:var(--danger);padding:8px 12px;border-radius:8px;font-size:13px;font-weight:600;margin-bottom:12px;text-align:center}
+.hint{font-size:11px;color:var(--grey-400);line-height:1.4;margin-bottom:14px}
+.fuel-hint{font-size:11px;color:var(--plum);line-height:1.3;margin:0 0 6px;font-style:italic}
+.ref-confirm{background:var(--plum-ghost);border:2px solid var(--plum);border-radius:12px;padding:20px;margin-bottom:14px;text-align:center}
+.ref-confirm .ref-label{font-size:11px;color:var(--grey-600);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.ref-confirm .ref-number{font-size:36px;font-weight:700;color:var(--plum);letter-spacing:4px;line-height:1.2}
+.ref-confirm .ref-instruction{font-size:13px;color:var(--plum-dark);margin-top:8px;font-weight:500}
+.info-toggle{display:inline-block;font-size:12px;color:var(--plum);cursor:pointer;font-weight:600;margin-bottom:10px;user-select:none;-webkit-tap-highlight-color:transparent}
+.info-toggle:hover{text-decoration:underline}
+.info-box{display:none;background:var(--plum-ghost);border:1px solid var(--plum-pale);border-radius:8px;padding:14px;margin-bottom:14px;font-size:12px;line-height:1.6;color:var(--grey-600)}
+.info-box.open{display:block}.info-box h4{color:var(--plum-dark);font-size:12px;margin:10px 0 4px}.info-box h4:first-child{margin-top:0}.info-box ul{margin:2px 0 6px 18px}.info-box li{margin-bottom:2px}.info-box strong{color:var(--text)}
+.settle-info{background:var(--amber-bg);border:1px solid #F0D9B5;border-radius:8px;padding:12px;font-size:12px;line-height:1.5;color:#7D5A29;margin-bottom:14px}.settle-info strong{color:#5B3A0A}
+.months-row{display:flex;align-items:center;gap:10px;margin:14px 0 6px;padding:10px 12px;background:var(--plum-ghost);border-radius:8px;border:1px solid var(--plum-pale)}
+.months-row label{font-size:12px;font-weight:600;color:var(--plum-dark);white-space:nowrap}
+.months-input{width:60px;padding:6px 8px;border-radius:6px;border:1.5px solid var(--plum-pale);font-size:16px;font-weight:700;text-align:center;color:var(--plum);background:#fff;font-family:inherit;outline:none}
+.months-hint{font-size:11px;color:var(--grey-400)}
+.tw{overflow-x:auto;margin:10px -4px 0}
+table{width:100%;border-collapse:collapse;font-size:12px}
+th{text-align:left;padding:6px;border-bottom:2px solid var(--grey-100);font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:var(--grey-400)}
+th.r,td.r{text-align:right}td{padding:6px;border-bottom:1px solid var(--grey-50);vertical-align:middle;font-variant-numeric:tabular-nums}
+tr.dim{opacity:.4}
+.badge{display:inline-block;padding:1px 6px;border-radius:3px;background:var(--plum-ghost);font-size:10px;font-weight:600;color:var(--plum-dark)}
+.tag-fuel{display:inline-block;padding:0 5px;border-radius:3px;margin-left:4px;background:var(--plum-pale);color:var(--plum-dark);font-size:9px;font-weight:600}
+.tag-ok{display:inline-block;padding:0 5px;border-radius:3px;margin-left:4px;background:var(--success-bg);color:var(--success);font-size:9px;font-weight:600}
+.tag-receipt{display:inline-block;padding:0 5px;border-radius:3px;margin-left:4px;background:#e8f0fe;color:#1a73e8;font-size:9px;font-weight:600;cursor:pointer;text-decoration:none}
+.ref-col{font-weight:600;color:var(--plum);font-size:11px;letter-spacing:.5px}
+
+.receipt-upload{margin-bottom:12px}
+.receipt-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:14px;border-radius:8px;border:2px dashed var(--grey-200);background:var(--grey-50);color:var(--grey-600);font-size:14px;font-weight:500;cursor:pointer;font-family:inherit;-webkit-tap-highlight-color:transparent;transition:all .15s}
+.receipt-btn:hover{border-color:var(--plum-light);background:var(--plum-ghost)}
+.receipt-btn.has-file{border-color:var(--success);background:var(--success-bg);color:var(--success)}
+.receipt-btn input{display:none}
+.receipt-preview{margin-top:8px;border-radius:8px;overflow:hidden;max-height:200px;display:none}
+.receipt-preview img{width:100%;height:auto;display:block;object-fit:cover;max-height:200px}
+.receipt-preview.visible{display:block}
+.receipt-required{font-size:11px;color:var(--danger);margin-top:4px;font-weight:500}
+
+.submit-qtr-card{background:var(--plum-ghost);border:2px solid var(--plum-pale);border-radius:10px;padding:16px;margin-top:12px}
+.submit-qtr-card h3{font-size:14px;color:var(--plum-dark);margin-bottom:8px}
+.submitted-badge{display:inline-block;padding:4px 12px;border-radius:6px;background:var(--success-bg);color:var(--success);font-size:12px;font-weight:600}
+.staff-item{display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border-radius:8px;background:var(--grey-50);border:1px solid var(--grey-100);margin-bottom:6px;flex-wrap:wrap;gap:8px}
+.staff-item.inactive-item{opacity:.5}
+.staff-name{font-weight:600;font-size:14px;color:var(--plum-dark)}
+.staff-email{font-size:11px;color:var(--grey-400)}
+.staff-status{font-size:10px;font-weight:600;padding:2px 8px;border-radius:4px}
+.staff-status.active{background:var(--success-bg);color:var(--success)}.staff-status.inactive{background:var(--danger-bg);color:var(--danger)}
+.staff-actions{display:flex;gap:6px;align-items:center}
+.staff-email-row{display:flex;gap:6px;align-items:center;width:100%;margin-top:4px}
+.staff-email-row input{flex:1;padding:8px;font-size:13px}
+.add-staff-row{display:flex;gap:8px;margin-bottom:6px}.add-staff-row input{flex:1}
+.pcard{padding:12px;border-radius:8px;background:var(--grey-50);border:1px solid var(--grey-100);margin-bottom:8px}
+.pcard-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+.pcard-name{font-size:14px;font-weight:600;color:var(--plum-dark)}
+.pcard-stats{display:flex;gap:16px;font-size:12px;color:var(--grey-600);flex-wrap:wrap}.pcard-stats strong{color:var(--text)}
+.mileage-form{display:flex;gap:8px;align-items:flex-end;flex-wrap:wrap;margin-top:8px}.mileage-form .field{margin-bottom:0;min-width:70px}.mileage-form input{padding:8px;font-size:14px}
+.empty{text-align:center;color:var(--grey-200);padding:28px;font-size:13px}
+#fuelField{display:none}#fuelField.vis{display:block}
+@media(max-width:480px){.row{flex-direction:column;gap:0}.pcard-stats{gap:10px}table{font-size:11px}th,td{padding:5px 3px}.qtr-bar{flex-direction:column;gap:4px;align-items:flex-start}.mileage-form{flex-direction:column}.add-staff-row{flex-direction:column}.staff-item{flex-direction:column;align-items:flex-start}}
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="logo-row"><div class="logo-mark">AL</div><div><div class="logo-title">Petty Cash</div><div class="logo-sub">Absolute Living</div></div></div>
+  <div style="text-align:right"><div class="stat-num" id="uCount">–</div><div class="stat-label">unsettled</div></div>
+</header>
+<div class="qtr-bar"><span class="qtr-label" id="qtrLabel">Loading…</span><span class="qtr-countdown" id="qtrCountdown"></span></div>
+<nav class="nav" id="navBar"></nav>
+
+<div class="main">
+
+<!-- CLAIM -->
+<div id="t-claim" class="tab active"><div class="card">
+  <h2 class="card-title">New Claim</h2>
+  <span class="info-toggle" onclick="toggle('staffHelp')">ℹ How to submit a claim</span>
+  <div class="info-box" id="staffHelp">
+    <h4>What to log</h4><ul><li>Any out-of-pocket business expense. Select your name, date, category, amount, and <strong>take a photo of the receipt</strong>.</li></ul>
+    <h4>Fuel — pump price required</h4><ul><li>Enter the <strong>£/litre</strong> from your receipt.</li></ul>
+    <h4>Receipt photo (required)</h4><ul><li>Every claim <strong>must</strong> include a clear photo of the receipt.</li><li>The photo is checked automatically — blurry, blank, or non-receipt images will be rejected.</li></ul>
+    <h4>End of quarter</h4><ul><li>Go to <strong>My Claims</strong> and tap <strong>"Submit for Payment"</strong> when you're done.</li></ul>
+  </div>
+  <div id="fb"></div>
+  <label class="label">Staff Member</label>
+  <div class="chip-row" id="chips"></div>
+  <div class="row">
+    <div class="field"><label class="label">Date</label><input type="date" id="fDate"></div>
+    <div class="field"><label class="label">Category</label>
+      <select id="fCat" onchange="catChange()"><option value="">Select…</option><option>Fuel</option><option>Car Wash / Valeting</option><option>Parking</option><option>Postage</option><option>Keys / Locks</option><option>Cleaning</option><option>Stationery</option><option>Windows</option><option>Other</option></select>
+    </div>
+  </div>
+  <div class="field"><label class="label">Description</label><input type="text" id="fDesc" placeholder="Details…"></div>
+  <div class="row">
+    <div class="field"><label class="label">Amount (£)</label><input type="number" step="0.01" id="fAmt" placeholder="0.00" oninput="chk()"></div>
+    <div class="field" id="fuelField"><label class="label">Pump Price (£/litre) *</label><input type="number" step="0.001" id="fFuel" placeholder="1.399" oninput="chk()"></div>
+  </div>
+  <div id="fuelHint" style="display:none" class="fuel-hint">Pump price required — check your receipt for the £/litre figure.</div>
+  <div class="receipt-upload">
+    <label class="label">Receipt Photo (required)</label>
+    <label class="receipt-btn" id="receiptBtn">
+      📷 Take photo or choose file
+      <input type="file" accept="image/*" capture="environment" id="receiptFile" onchange="receiptChanged()">
+    </label>
+    <div class="receipt-preview" id="receiptPreview"><img id="receiptImg"></div>
+    <div class="receipt-required" id="receiptMsg"></div>
+  </div>
+  <button class="btn" id="subBtn" disabled onclick="sub()">Submit Claim</button>
+</div></div>
+
+<!-- MY CLAIMS -->
+<div id="t-myclaims" class="tab"><div class="card">
+  <h2 class="card-title">My Claims</h2>
+  <p class="hint">Select your name, review your claims, then submit for payment when you're done.</p>
+  <label class="label">Who are you?</label>
+  <div class="chip-row" id="myChips"></div>
+  <div id="myClaimsBody"></div>
+</div></div>
+
+<!-- LEDGER -->
+<div id="t-ledger" class="tab"><div class="card">
+  <h2 class="card-title">Ledger</h2>
+  <div class="row" style="margin-bottom:10px">
+    <select id="fltS" onchange="rLedger()"><option value="all">All Staff</option></select>
+    <select id="fltQ" onchange="rLedger()"><option value="all">All Quarters</option></select>
+  </div>
+  <div id="ledger"></div>
+</div></div>
+
+<!-- SETTLE -->
+<div id="t-settle" class="tab"><div class="card">
+  <h2 class="card-title">Quarterly Settlement</h2>
+  <span class="info-toggle" onclick="toggle('ownerHelp')">ℹ How settlement works</span>
+  <div class="info-box" id="ownerHelp">
+    <h4>Staff submissions</h4><ul><li>Staff tap "Submit for Payment" on My Claims when done. You get an email.</li></ul>
+    <h4>Months in period</h4><ul><li>Defaults to 3. Change for short periods.</li></ul>
+    <h4>Process</h4><ul><li>Wait for staff to submit → select quarter → review → settle → emails sent.</li></ul>
+  </div>
+  <div id="settleAlert"></div>
+  <div id="submissionStatus"></div>
+  <div class="row"><div class="field"><select id="sQtr" onchange="rSettle()"><option value="">Select quarter…</option></select></div></div>
+  <div id="monthsRow" style="display:none"><div class="months-row"><label>Months:</label><input type="number" class="months-input" id="sMonths" value="3" min="1" max="12" step="1" onchange="rSettle()"><span class="months-hint">Default 3</span></div></div>
+  <div id="settleBody"></div>
+</div></div>
+
+<!-- SETTINGS -->
+<div id="t-settings" class="tab">
+  <div class="card"><h2 class="card-title">Staff Members</h2>
+    <p class="hint">Add staff, set emails, deactivate leavers.</p>
+    <div class="add-staff-row"><input type="text" id="newStaffName" placeholder="Name…"><input type="email" id="newStaffEmail" placeholder="Email…"><button class="btn sm" onclick="addStaff()">Add</button></div>
+    <div id="staffFb"></div><div id="staffList"></div>
+  </div>
+  <div class="card"><h2 class="card-title">Mileage Profiles</h2>
+    <p class="hint">Personal commuting mileage deducted at settlement.</p>
+    <div id="mileageSection"></div>
+  </div>
+</div>
+
+</div>
+
+<script>
+var S={entries:[],summary:{},profiles:{},staff:'',staffList:[],submissions:[]};
+var SM={},EM={};
+var TABS=[{id:'claim',label:'New Claim',icon:'+'},{id:'myclaims',label:'My Claims',icon:'📋'},{id:'ledger',label:'Ledger',icon:'☰'},{id:'settle',label:'Settle',icon:'£'},{id:'settings',label:'Settings',icon:'⚙'}];
+var QTR_ENDS=[[2,31],[5,30],[8,30],[11,31]],QTR_NAMES=['Q1 Jan–Mar','Q2 Apr–Jun','Q3 Jul–Sep','Q4 Oct–Dec'];
+
+function getQuarterInfo(){var now=new Date(),m=now.getMonth(),y=now.getFullYear(),qi=Math.floor(m/3);var ed=new Date(y,QTR_ENDS[qi][0],QTR_ENDS[qi][1],23,59,59);return{name:QTR_NAMES[qi],year:y,daysLeft:Math.ceil((ed-now)/864e5),label:y+' '+['Q1 Jan-Mar','Q2 Apr-Jun','Q3 Jul-Sep','Q4 Oct-Dec'][qi]};}
+function updateQtrBar(){var q=getQuarterInfo();document.getElementById('qtrLabel').textContent='Current quarter: '+q.name+' '+q.year;var cd=document.getElementById('qtrCountdown');if(q.daysLeft<=0){cd.textContent='Quarter ended — submit & settle';cd.className='qtr-countdown overdue';}else if(q.daysLeft<=14){cd.textContent=q.daysLeft+' day'+(q.daysLeft===1?'':'s')+' left';cd.className='qtr-countdown urgent';}else{cd.textContent=q.daysLeft+' days remaining';cd.className='qtr-countdown';}}
+function toggle(id){document.getElementById(id).classList.toggle('open');}
+
+(function(){var nav=document.getElementById('navBar');TABS.forEach(function(t){var b=document.createElement('button');b.className='nav-btn'+(t.id==='claim'?' active':'');b.innerHTML='<span class="nav-icon">'+t.icon+'</span><span>'+t.label+'</span>';b.onclick=function(){go(t.id);};b.dataset.tab=t.id;nav.appendChild(b);});})();
+
+function go(t){document.querySelectorAll('.nav-btn').forEach(function(b){b.classList.toggle('active',b.dataset.tab===t);});document.querySelectorAll('.tab').forEach(function(el){el.classList.toggle('active',el.id==='t-'+t);});if(t==='myclaims')rMyClaims();if(t==='ledger')rLedger();if(t==='settle')rSettleOpts();if(t==='settings'){rStaffList();rMileageSection();}}
+
+function load(){
+  google.script.run.withSuccessHandler(function(list){S.staffList=list;SM={};EM={};list.forEach(function(s){SM[s.id]=s.name;EM[s.id]=s.email;});buildChips();buildFilters();
+    google.script.run.withSuccessHandler(function(r){S.entries=r.entries||[];S.summary=r.summary||{};document.getElementById('uCount').textContent=S.entries.filter(function(e){return!e.settled;}).length;rLedger();}).getEntries();
+  }).getStaffList();
+  google.script.run.withSuccessHandler(function(r){S.profiles=r||{};}).getProfiles();
+  google.script.run.withSuccessHandler(function(r){S.submissions=r||[];}).getSubmissions();
+}
+
+function buildChips(){var cr=document.getElementById('chips');cr.innerHTML='';S.staffList.filter(function(s){return s.active;}).forEach(function(s){var b=document.createElement('button');b.className='chip'+(S.staff===s.id?' active':'');b.textContent=s.name;b.onclick=function(){cr.querySelectorAll('.chip').forEach(function(c){c.classList.remove('active');});b.classList.add('active');S.staff=s.id;chk();};cr.appendChild(b);});}
+function buildFilters(){var fs=document.getElementById('fltS'),cv=fs.value;fs.innerHTML='<option value="all">All Staff</option>';S.staffList.forEach(function(s){var o=document.createElement('option');o.value=s.id;o.textContent=s.name+(s.active?'':' (inactive)');fs.appendChild(o);});fs.value=cv;}
+
+(function(){document.getElementById('fDate').value=new Date().toISOString().slice(0,10);updateQtrBar();load();})();
+
+// ─── RECEIPT ───
+var receiptData=null;
+function receiptChanged(){
+  var file=document.getElementById('receiptFile').files[0];
+  var msg=document.getElementById('receiptMsg');
+  var preview=document.getElementById('receiptPreview');
+  if(!file){receiptData=null;chk();return;}
+
+  // Basic checks
+  if(file.size<5000){msg.textContent='File is too small — please take a clear photo of the receipt.';msg.style.color='var(--danger)';receiptData=null;document.getElementById('receiptBtn').classList.remove('has-file');preview.classList.remove('visible');chk();return;}
+  if(file.size>15000000){msg.textContent='File is too large (max 15MB). Try taking the photo closer.';msg.style.color='var(--danger)';receiptData=null;document.getElementById('receiptBtn').classList.remove('has-file');preview.classList.remove('visible');chk();return;}
+
+  var btn=document.getElementById('receiptBtn');
+  btn.classList.add('has-file');
+  btn.childNodes[0].textContent='✓ '+file.name.substring(0,25);
+  msg.textContent='Receipt will be verified when you submit.';
+  msg.style.color='var(--grey-400)';
+
+  var reader=new FileReader();
+  reader.onload=function(e){
+    receiptData={data:e.target.result.split(',')[1],name:file.name,type:file.type};
+    document.getElementById('receiptImg').src=e.target.result;
+    preview.classList.add('visible');
+    chk();
+  };
+  reader.readAsDataURL(file);
+}
+
+// ─── CLAIM ───
+function catChange(){var f=document.getElementById('fCat').value==='Fuel';document.getElementById('fuelField').classList.toggle('vis',f);document.getElementById('fuelHint').style.display=f?'block':'none';document.getElementById('fDesc').placeholder=f?'e.g. Shell Balham':'Details…';if(!f)document.getElementById('fFuel').value='';chk();}
+function chk(){
+  var c=document.getElementById('fCat').value,a=document.getElementById('fAmt').value,d=document.getElementById('fDate').value;
+  var fuel=c==='Fuel',fp=document.getElementById('fFuel').value;
+  var hasReceipt=!!receiptData;
+  document.getElementById('subBtn').disabled=!(S.staff&&d&&c&&a&&hasReceipt&&(!fuel||fp));
+}
+function sub(){
+  var btn=document.getElementById('subBtn');btn.disabled=true;btn.textContent='Uploading & verifying…';
+  var msg=document.getElementById('receiptMsg');
+  msg.textContent='Checking receipt…';msg.style.color='var(--plum)';
+
+  var cat=document.getElementById('fCat').value;
+  var data={staff:S.staff,date:document.getElementById('fDate').value,category:cat,description:document.getElementById('fDesc').value||cat,amount:parseFloat(document.getElementById('fAmt').value),fuelPrice:cat==='Fuel'?parseFloat(document.getElementById('fFuel').value):null};
+  if(receiptData){data.receiptData=receiptData.data;data.receiptName=receiptData.name;data.receiptType=receiptData.type;}
+
+  google.script.run.withSuccessHandler(function(r){
+    document.getElementById('fb').innerHTML='<div class="ref-confirm"><div class="ref-label">Claim recorded — your reference number</div><div class="ref-number">'+esc(r.ref)+'</div><div class="ref-instruction">✏ Write this number on your receipt</div></div>';
+    document.getElementById('fCat').value='';document.getElementById('fDesc').value='';document.getElementById('fAmt').value='';document.getElementById('fFuel').value='';document.getElementById('fuelField').classList.remove('vis');document.getElementById('fuelHint').style.display='none';
+    receiptData=null;var rb=document.getElementById('receiptBtn');rb.classList.remove('has-file');rb.childNodes[0].textContent='📷 Take photo or choose file';document.getElementById('receiptFile').value='';
+    document.getElementById('receiptPreview').classList.remove('visible');
+    msg.textContent='';btn.textContent='Submit Claim';chk();load();
+  }).withFailureHandler(function(e){
+    var errMsg=e.message||'Unknown error';
+    if(errMsg.indexOf('Receipt rejected')>-1){
+      document.getElementById('fb').innerHTML='<div class="err">❌ '+esc(errMsg)+'</div>';
+      msg.textContent='Please take a clear photo of the actual receipt and try again.';
+      msg.style.color='var(--danger)';
+    } else {
+      document.getElementById('fb').innerHTML='<div class="err">Error: '+esc(errMsg)+'</div>';
+    }
+    btn.textContent='Submit Claim';chk();
+  }).submitClaim(data);
+}
+
+// ─── MY CLAIMS ───
+function rMyClaims(){
+  var bd=document.getElementById('myClaimsBody');
+  var cr=document.getElementById('myChips');cr.innerHTML='';
+  S.staffList.filter(function(s){return s.active;}).forEach(function(s){
+    var b=document.createElement('button');b.className='chip'+(S.staff===s.id?' active':'');b.textContent=s.name;
+    b.onclick=function(){cr.querySelectorAll('.chip').forEach(function(c){c.classList.remove('active');});b.classList.add('active');S.staff=s.id;buildChips();rMyClaims();};
+    cr.appendChild(b);
+  });
+  if(!S.staff){bd.innerHTML='';return;}
+  var qi=getQuarterInfo();
+  var myQtrClaims=S.entries.filter(function(e){return e.staff===S.staff&&!e.settled&&e.quarter===qi.label;});
+  var myTotal=myQtrClaims.reduce(function(a,e){return a+e.amount;},0);
+  var alreadySubmitted=S.submissions.some(function(s){return s.staffId===S.staff&&s.quarter===qi.label;});
+
+  var h='<h3 class="sub-title">'+esc(SM[S.staff])+'\'s claims — '+qi.name+' '+qi.year+'</h3>';
+  if(myQtrClaims.length===0){h+='<p class="empty">No claims this quarter yet</p>';}
+  else{
+    h+='<div class="tw"><table><thead><tr><th>Ref</th><th>Date</th><th>Description</th><th class="r">Amount</th></tr></thead><tbody>';
+    myQtrClaims.sort(function(a,b){return b.date.localeCompare(a.date);}).forEach(function(e){
+      h+='<tr><td class="ref-col">'+(e.ref||'–')+'</td><td>'+fmtD(e.date)+'</td><td>'+esc(e.description);
+      if(e.category==='Fuel')h+='<span class="tag-fuel">Fuel</span>';
+      if(e.receipt)h+='<a href="'+esc(e.receipt)+'" target="_blank" class="tag-receipt">📎</a>';
+      h+='</td><td class="r">'+gbp(e.amount)+'</td></tr>';
+    });
+    h+='<tr style="border-top:2px solid var(--plum)"><td colspan="3" style="font-weight:700;padding:10px 6px">Total ('+myQtrClaims.length+' claims)</td><td class="r" style="font-weight:700;padding:10px 6px">'+gbp(myTotal)+'</td></tr></tbody></table></div>';
+  }
+  h+='<div class="submit-qtr-card">';
+  if(alreadySubmitted){h+='<h3>✓ Submitted</h3><p class="hint" style="margin:4px 0 0">You\'ve submitted for this quarter. You\'ll get an email when it\'s settled.</p>';}
+  else if(myQtrClaims.length>0){h+='<h3>Ready to submit?</h3><p class="hint" style="margin:4px 0 8px">Make sure all your receipts are in.</p><button class="btn amber" onclick="submitMyQuarter()">Submit '+qi.name+' for Payment</button>';}
+  else{h+='<h3>Nothing to submit yet</h3><p class="hint" style="margin:4px 0 0">Add your claims first.</p>';}
+  h+='</div>';bd.innerHTML=h;
+}
+function submitMyQuarter(){var qi=getQuarterInfo();var my=S.entries.filter(function(e){return e.staff===S.staff&&!e.settled&&e.quarter===qi.label;});var total=my.reduce(function(a,e){return a+e.amount;},0);if(!confirm('Submit '+my.length+' claims ('+gbp(total)+') for '+qi.name+'?'))return;google.script.run.withSuccessHandler(function(){alert('Submitted! Your manager has been notified.');load();setTimeout(function(){rMyClaims();},500);}).withFailureHandler(function(e){alert('Error: '+e.message);}).submitQuarter({quarter:qi.label,staffId:S.staff,count:my.length,total:total});}
+
+// ─── LEDGER ───
+function rLedger(){
+  var sf=document.getElementById('fltS').value,qf=document.getElementById('fltQ').value;
+  var qs={};S.entries.forEach(function(e){if(e.quarter)qs[e.quarter]=1;});
+  var sel=document.getElementById('fltQ'),cv=sel.value;sel.innerHTML='<option value="all">All Quarters</option>';
+  Object.keys(qs).sort().reverse().forEach(function(q){var o=document.createElement('option');o.value=q;o.textContent=q;sel.appendChild(o);});sel.value=cv;
+  var f=S.entries.filter(function(e){if(sf!=='all'&&e.staff!==sf)return false;if(qf!=='all'&&e.quarter!==qf)return false;return true;}).sort(function(a,b){return b.date.localeCompare(a.date);});
+  if(!f.length){document.getElementById('ledger').innerHTML='<p class="empty">No entries yet</p>';return;}
+  var h='<div class="tw"><table><thead><tr><th>Ref</th><th>Date</th><th>Staff</th><th>Description</th><th class="r">Amount</th><th class="r">£/L</th><th></th></tr></thead><tbody>';
+  f.forEach(function(e){h+='<tr'+(e.settled?' class="dim"':'')+'><td class="ref-col">'+(e.ref||'–')+'</td><td>'+fmtD(e.date)+'</td><td><span class="badge">'+esc(SM[e.staff]||e.staff)+'</span></td><td>'+esc(e.description);if(e.category==='Fuel')h+='<span class="tag-fuel">Fuel</span>';if(e.settled)h+='<span class="tag-ok">Settled</span>';if(e.receipt)h+='<a href="'+esc(e.receipt)+'" target="_blank" class="tag-receipt">📎</a>';h+='</td><td class="r">'+gbp(e.amount)+'</td><td class="r" style="color:var(--grey-400)">'+(e.fuelPrice?'£'+Number(e.fuelPrice).toFixed(3):'–')+'</td><td>';if(!e.settled)h+='<button class="btn-del" onclick="del('+e.rowIndex+')">×</button>';h+='</td></tr>';});
+  h+='</tbody></table></div>';document.getElementById('ledger').innerHTML=h;
+}
+function del(ri){if(!confirm('Delete this entry?'))return;google.script.run.withSuccessHandler(function(){load();}).deleteEntry(ri);}
+
+// ─── SETTLE ───
+function rSettleOpts(){
+  var sel=document.getElementById('sQtr');sel.innerHTML='<option value="">Select quarter…</option>';
+  var qs={};S.entries.forEach(function(e){if(!e.settled&&e.quarter)qs[e.quarter]=1;});
+  Object.keys(qs).sort().forEach(function(q){var o=document.createElement('option');o.value=q;o.textContent=q;sel.appendChild(o);});
+  document.getElementById('settleBody').innerHTML='';document.getElementById('monthsRow').style.display='none';
+  var qi=getQuarterInfo();var staffWithClaims={};S.entries.forEach(function(e){if(!e.settled&&e.quarter===qi.label)staffWithClaims[e.staff]=true;});
+  var statusHtml='';
+  if(Object.keys(staffWithClaims).length>0){statusHtml='<div style="margin-bottom:14px"><p class="label">Submission Status — '+qi.name+'</p>';Object.keys(staffWithClaims).forEach(function(sid){var sub=S.submissions.find(function(s){return s.staffId===sid&&s.quarter===qi.label;});statusHtml+='<div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid var(--grey-50)"><span style="font-size:13px">'+(SM[sid]||sid)+'</span>';if(sub)statusHtml+='<span class="submitted-badge">✓ '+sub.date+'</span>';else statusHtml+='<span style="font-size:11px;color:var(--amber);font-weight:600">Awaiting</span>';statusHtml+='</div>';});statusHtml+='</div>';}
+  document.getElementById('submissionStatus').innerHTML=statusHtml;
+  var al=document.getElementById('settleAlert');
+  if(qi.daysLeft<=14&&qi.daysLeft>0)al.innerHTML='<div class="settle-info"><strong>'+qi.daysLeft+' days left.</strong> Remind staff to submit.</div>';
+  else if(qi.daysLeft<=0)al.innerHTML='<div class="settle-info"><strong>Quarter ended.</strong> Settle when ready.</div>';
+  else al.innerHTML='';
+}
+function rSettle(){
+  var q=document.getElementById('sQtr').value,bd=document.getElementById('settleBody');
+  if(!q){bd.innerHTML='';document.getElementById('monthsRow').style.display='none';return;}
+  document.getElementById('monthsRow').style.display='block';var months=parseFloat(document.getElementById('sMonths').value)||3;
+  var d=S.summary[q]||{};if(!Object.keys(d).length){bd.innerHTML='<p class="empty">No unsettled entries</p>';return;}
+  var h='<div style="margin-top:16px"><h3 class="sub-title">'+esc(q)+' <span style="font-weight:400;font-size:12px;color:var(--grey-400)">('+months+' mo)</span></h3>';
+  h+='<div class="tw"><table><thead><tr><th>Staff</th><th class="r">Gross</th><th class="r">Avg £/L</th><th class="r">Mileage</th><th class="r" style="font-weight:700">Net</th></tr></thead><tbody>';
+  S._ps=[];
+  Object.keys(d).sort().forEach(function(sid){var x=d[sid],avg=x.fuelPrices.length?x.fuelPrices.reduce(function(a,b){return a+b;},0)/x.fuelPrices.length:null;var md=0;if(S.profiles[sid]&&avg){var p=S.profiles[sid],lpm=p.milesReturn*p.tripsPerWeek*52/12/(p.mpg/3.785);md=lpm*avg*months;}var net=x.total-md;S._ps.push({staff:sid,gross:x.total,avgFuelPrice:avg,mileageDeduction:md,net:net,entryCount:x.count});h+='<tr><td>'+esc(SM[sid]||sid)+'</td><td class="r">'+gbp(x.total)+'</td><td class="r" style="color:var(--grey-400)">'+(avg?'£'+avg.toFixed(3):'–')+'</td><td class="r" style="color:var(--danger)">'+(md>0?'('+gbp(md)+')':'–')+'</td><td class="r" style="font-weight:700">'+gbp(net)+'</td></tr>';});
+  h+='</tbody></table></div>';
+  var noEmail=[];Object.keys(d).forEach(function(sid){if(!EM[sid])noEmail.push(SM[sid]||sid);});
+  if(noEmail.length)h+='<p style="font-size:11px;color:var(--amber);margin-top:8px">⚠ No email: '+noEmail.join(', ')+'</p>';
+  h+='<button class="btn green" style="margin-top:14px" onclick="doSettle()">Mark Quarter as Settled</button></div>';bd.innerHTML=h;
+}
+function doSettle(){var q=document.getElementById('sQtr').value,months=parseFloat(document.getElementById('sMonths').value)||3;if(!q||!S._ps)return;if(!confirm('Settle '+q+'? Emails will be sent.'))return;google.script.run.withSuccessHandler(function(r){alert('Settled '+r.settled+' entries. Emails sent.');load();rSettleOpts();}).settleQuarter({quarter:q,staffSummary:S._ps});}
+
+// ─── SETTINGS ───
+function rStaffList(){var bd=document.getElementById('staffList');if(!S.staffList.length){bd.innerHTML='<p class="empty">No staff</p>';return;}var h='';S.staffList.forEach(function(s){h+='<div class="staff-item'+(s.active?'':' inactive-item')+'"><div style="flex:1;min-width:0"><span class="staff-name">'+esc(s.name)+'</span> <span class="staff-status '+(s.active?'active':'inactive')+'">'+(s.active?'Active':'Inactive')+'</span>';if(s.email)h+='<div class="staff-email">✉ '+esc(s.email)+'</div>';else h+='<div class="staff-email" style="color:var(--amber)">No email</div>';h+='</div><div class="staff-actions"><button class="btn sm outline" onclick="toggleStaff(\''+s.id+'\')">'+(s.active?'Deactivate':'Activate')+'</button>';if(!s.active)h+='<button class="btn sm danger-outline" onclick="removeStaff(\''+s.id+'\',\''+esc(s.name)+'\')">Delete</button>';h+='</div></div><div class="staff-email-row" style="padding:0 12px 8px"><input type="email" id="em-'+s.id+'" value="'+esc(s.email||'')+'" placeholder="Email…" style="flex:1;padding:8px;font-size:13px"><button class="btn sm outline" onclick="saveEmail(\''+s.id+'\')">Save</button></div>';});bd.innerHTML=h;}
+function addStaff(){var name=document.getElementById('newStaffName').value.trim(),email=document.getElementById('newStaffEmail').value.trim();if(!name){document.getElementById('staffFb').innerHTML='<div class="err">Enter a name</div>';return;}google.script.run.withSuccessHandler(function(){document.getElementById('staffFb').innerHTML='<div class="ok">'+esc(name)+' added</div>';setTimeout(function(){document.getElementById('staffFb').innerHTML='';},2000);document.getElementById('newStaffName').value='';document.getElementById('newStaffEmail').value='';load();}).withFailureHandler(function(e){document.getElementById('staffFb').innerHTML='<div class="err">'+e.message+'</div>';}).addStaff({name:name,email:email});}
+function saveEmail(sid){var email=document.getElementById('em-'+sid).value.trim();google.script.run.withSuccessHandler(function(){load();setTimeout(function(){go('settings');},300);}).updateStaffEmail({staffId:sid,email:email});}
+function toggleStaff(id){google.script.run.withSuccessHandler(function(){load();setTimeout(function(){go('settings');},300);}).toggleStaff(id);}
+function removeStaff(id,name){if(!confirm('Delete '+name+'?'))return;google.script.run.withSuccessHandler(function(){load();setTimeout(function(){go('settings');},300);}).withFailureHandler(function(e){alert(e.message);}).removeStaff(id);}
+
+function rMileageSection(){var bd=document.getElementById('mileageSection');var active=S.staffList.filter(function(s){return s.active;});if(!active.length){bd.innerHTML='<p class="empty">No active staff</p>';return;}var h='';active.forEach(function(s){var p=S.profiles[s.id];h+='<div class="pcard"><div class="pcard-head"><span class="pcard-name">'+esc(s.name)+'</span>';h+=p?'<span style="font-size:11px;color:var(--success);font-weight:600">✓ Set</span>':'<span style="font-size:11px;color:var(--grey-400)">Not set</span>';h+='</div>';if(p)h+='<div class="pcard-stats" style="margin-bottom:8px"><span><strong>'+p.milesReturn+'</strong> mi</span><span><strong>'+p.mpg+'</strong> mpg</span><span><strong>'+p.tripsPerWeek+'</strong>×/wk</span><span style="color:var(--plum-dark)">= <strong>'+Math.round(p.milesReturn*p.tripsPerWeek*52)+'</strong> mi/yr</span></div>';h+='<div class="mileage-form"><div class="field"><label class="label">Return Mi</label><input type="number" id="mr-'+s.id+'" value="'+(p?p.milesReturn:'')+'" placeholder="0"></div><div class="field"><label class="label">MPG</label><input type="number" id="mpg-'+s.id+'" value="'+(p?p.mpg:'')+'" placeholder="0"></div><div class="field"><label class="label">Trips/Wk</label><input type="number" id="tw-'+s.id+'" value="'+(p?p.tripsPerWeek:'')+'" placeholder="0"></div><button class="btn sm" onclick="saveMileage(\''+s.id+'\')">'+(p?'Update':'Set up')+'</button>';if(p)h+=' <button class="btn sm danger-outline" onclick="removeMileage(\''+s.id+'\')">Remove</button>';h+='</div></div>';});bd.innerHTML=h;}
+function saveMileage(sid){var mr=parseFloat(document.getElementById('mr-'+sid).value),mpg=parseFloat(document.getElementById('mpg-'+sid).value),tw=parseFloat(document.getElementById('tw-'+sid).value);if(!mr||!mpg||!tw){alert('Fill all fields');return;}google.script.run.withSuccessHandler(function(){google.script.run.withSuccessHandler(function(r){S.profiles=r||{};rMileageSection();}).getProfiles();}).saveProfile({staffId:sid,milesReturn:mr,mpg:mpg,tripsPerWeek:tw});}
+function removeMileage(sid){if(!confirm('Remove profile?'))return;google.script.run.withSuccessHandler(function(){google.script.run.withSuccessHandler(function(r){S.profiles=r||{};rMileageSection();}).getProfiles();}).removeProfile(sid);}
+
+function gbp(v){return '£'+Number(v).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g,',');}
+function fmtD(s){var d=new Date(s+'T00:00:00'),m=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];return d.getDate().toString().padStart(2,'0')+' '+m[d.getMonth()]+' '+d.getFullYear();}
+function esc(s){var d=document.createElement('div');d.textContent=s||'';return d.innerHTML;}
+</script>
+</body>
+</html>
